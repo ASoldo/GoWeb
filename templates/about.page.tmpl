@@ -1,0 +1,12 @@
+{{template "base" .}}
+
+{{define "content"}}
+  <h1>About Page</h1> 
+  <div x-data="{name: ''}" >
+    <h1 x-text="name" x-init="name = '{{index .StringMap "test"}}'"></h1>
+    <h1>Andrijaaawwwww</h1>
+    <h1>Andrijaaa</h1>
+    <h1>{{index .StringMap "test"}}</h1>
+    <button @click="name = 'stevica'">Click me</button>
+  </div>
+{{end}}

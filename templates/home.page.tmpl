@@ -1,0 +1,8 @@
+{{template "base" .}}
+
+{{define "content"}}
+  <h1>Home Page</h1> 
+  <div x-data="{name: 'Andrija'}">
+    <h1 x-text="name"></h1>
+  </div>
+{{end}}
