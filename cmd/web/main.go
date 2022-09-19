@@ -3,10 +3,13 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/ASoldo/go-web/pkg/config"
 	"github.com/ASoldo/go-web/pkg/handlers"
 	"github.com/ASoldo/go-web/pkg/render"
+
+	"runtime/trace"
 )
 
 func main() {
@@ -21,8 +24,30 @@ func main() {
 	handlers.NewHandlers(repo)
 	render.NewTemplate(&app)
 	fmt.Println("Server started")
-	http.HandleFunc("/", handlers.Repo.Home)
-	http.HandleFunc("/about", handlers.Repo.About)
 	fmt.Println("Listening on port: 8080")
-	http.ListenAndServe(":8080", nil)
+	tracer()
+	srv := &http.Server{
+		Addr:    ":8080",
+		Handler: routes(&app),
+	}
+
+	err = srv.ListenAndServe()
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func tracer() {
+	f, err := os.Create("trace.out")
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+	err = trace.Start(f)
+	if err != nil {
+		panic(err)
+	}
+	defer trace.Stop()
+
+	fmt.Println("Tracing")
 }
