@@ -6,9 +6,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/ASoldo/go-web/pkg/config"
-	"github.com/ASoldo/go-web/pkg/handlers"
-	"github.com/ASoldo/go-web/pkg/render"
+	"github.com/ASoldo/GoWeb/pkg/config"
+	"github.com/ASoldo/GoWeb/pkg/handlers"
+	"github.com/ASoldo/GoWeb/pkg/render"
 	"github.com/alexedwards/scs/v2"
 
 	"runtime/trace"

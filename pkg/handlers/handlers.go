@@ -3,9 +3,9 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/ASoldo/go-web/pkg/config"
-	"github.com/ASoldo/go-web/pkg/models"
-	"github.com/ASoldo/go-web/pkg/render"
+	"github.com/ASoldo/GoWeb/pkg/config"
+	"github.com/ASoldo/GoWeb/pkg/models"
+	"github.com/ASoldo/GoWeb/pkg/render"
 )
 
 var Repo *Repository

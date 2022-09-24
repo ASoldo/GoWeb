@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/ASoldo/go-web/pkg/config"
-	"github.com/ASoldo/go-web/pkg/models"
+	"github.com/ASoldo/GoWeb/pkg/config"
+	"github.com/ASoldo/GoWeb/pkg/models"
 )
 
 var app *config.AppConfig
