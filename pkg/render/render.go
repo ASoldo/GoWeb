@@ -11,10 +11,9 @@ import (
 	"github.com/ASoldo/go-web/pkg/models"
 )
 
-// var functions = template.FuncMap{}
 var app *config.AppConfig
 
-// sets the config for template package
+// Sets the config for the template package
 func NewTemplate(ac *config.AppConfig) {
 	app = ac
 }

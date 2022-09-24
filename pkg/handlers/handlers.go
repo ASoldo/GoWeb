@@ -23,14 +23,10 @@ func NewHandlers(r *Repository) {
 	Repo = r
 }
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	// fmt.Fprintf(w, "Welcome to the Internet")
-	// fmt.Println(w)
-	// fmt.Println(r)
 	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
 }
 
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
-	// fmt.Fprintf(w, "This is About page")
 	stringMap := make(map[string]string)
 	stringMap["test"] = "Hello, my name is Andrija Hebrang"
 	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{
