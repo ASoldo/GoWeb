@@ -43,7 +43,6 @@ func RenderTemplate(w http.ResponseWriter, tpl string, td *models.TemplateData) 
 	if err != nil {
 		fmt.Println(err)
 	}
-
 }
 
 func CreateTemplateCache() (map[string]*template.Template, error) {
