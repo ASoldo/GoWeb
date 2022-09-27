@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ASoldo/GoWeb/pkg/config"
-	"github.com/ASoldo/GoWeb/pkg/handlers"
-	"github.com/ASoldo/GoWeb/pkg/render"
+	"github.com/ASoldo/GoWeb/internal/config"
+	"github.com/ASoldo/GoWeb/internal/handlers"
+	"github.com/ASoldo/GoWeb/internal/render"
 	"github.com/alexedwards/scs/v2"
 
 	"runtime/trace"

@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/ASoldo/GoWeb/pkg/config"
-	"github.com/ASoldo/GoWeb/pkg/handlers"
+	"github.com/ASoldo/GoWeb/internal/config"
+	"github.com/ASoldo/GoWeb/internal/handlers"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 )

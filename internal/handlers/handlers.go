@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/ASoldo/GoWeb/pkg/config"
-	"github.com/ASoldo/GoWeb/pkg/models"
-	"github.com/ASoldo/GoWeb/pkg/render"
+	"github.com/ASoldo/GoWeb/internal/config"
+	"github.com/ASoldo/GoWeb/internal/models"
+	"github.com/ASoldo/GoWeb/internal/render"
 )
 
 var Repo *Repository

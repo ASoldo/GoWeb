@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/ASoldo/GoWeb/pkg/config"
-	"github.com/ASoldo/GoWeb/pkg/models"
+	"github.com/ASoldo/GoWeb/internal/config"
+	"github.com/ASoldo/GoWeb/internal/models"
 	"github.com/justinas/nosurf"
 )
 
