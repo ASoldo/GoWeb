@@ -1,6 +1,6 @@
 {{define "base"}}
 <!DOCTYPE html>
-<html x-data="{theme:'dracula'}" name="main" lang="en" :data-theme="theme">
+<html x-data="{}" name="main" lang="en" data-theme="dracula">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -9,7 +9,6 @@
       defer
       src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://cdn.jsdelivr.net/npm/daisyui@2.31.0/dist/full.css"
@@ -42,6 +41,15 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
     />
 
+    <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@glidejs/glide@3.0.4/dist/css/glide.core.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@glidejs/glide@3.0.4/dist/css/glide.theme.css"
+    />
     <script>
       tailwind.config = {
         theme: {
@@ -54,6 +62,12 @@
       };
     </script>
 
+    <style>
+      /* .glide__arrow--left{
+        background-color: red;
+      } */
+    </style>
+
     <title>Home Page</title>
 
     {{block "css" .}}
@@ -63,11 +77,66 @@
   </head>
 
   <body>
-    <!-- Nav Start -->
-    <div class="navbar bg-base-100">
-      <div class="navbar-start">
-        <div class="dropdown">
-          <label tabindex="0" class="btn btn-ghost btn-circle">
+    <div class="fixed top-0 w-full z-50">
+      <!-- Nav Start -->
+      <div class="navbar bg-base-100">
+        <div class="navbar-start">
+          <div class="dropdown">
+            <label tabindex="0" class="btn btn-ghost btn-circle">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h7"
+                />
+              </svg>
+            </label>
+            <ul
+              tabindex="0"
+              class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li><a href="/">Homepage</a></li>
+              <li><a href="/about">Portfolio</a></li>
+              <li><a>About</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="navbar-center">
+          <div class="form-control">
+            <div class="input-group input-group-xs">
+              <input
+                type="text"
+                placeholder="Search…"
+                class="input input-bordered input-xs"
+              />
+              <button class="btn btn-square btn-xs">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="navbar-end">
+          <!-- <button class="btn btn-ghost btn-circle">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5"
@@ -79,62 +148,40 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M4 6h16M4 12h16M4 18h7"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
-          </label>
-          <ul
-            tabindex="0"
-            class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            <li><a>Homepage</a></li>
-            <li><a>Portfolio</a></li>
-            <li><a>About</a></li>
-          </ul>
+          </button> -->
+          <button class="btn btn-ghost btn-circle" @click="theme='night'">
+            <div class="indicator">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+              <span class="badge badge-xs badge-primary indicator-item"></span>
+            </div>
+          </button>
         </div>
       </div>
-      <div class="navbar-center">
-        <a class="btn btn-ghost normal-case text-xl">daisyUI</a>
-      </div>
-      <div class="navbar-end">
-        <button class="btn btn-ghost btn-circle">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </button>
-        <button class="btn btn-ghost btn-circle" @click="theme='night'">
-          <div class="indicator">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-              />
-            </svg>
-            <span class="badge badge-xs badge-primary indicator-item"></span>
-          </div>
-        </button>
+      <!-- Nav End -->
+      <div class="bg-base-100 flex space-x-2 justify-center">
+        <div class="tabs">
+          <a class="tab tab-bordered">Tab 1</a>
+          <a class="tab tab-bordered tab-active">Tab 2</a>
+          <a class="tab tab-bordered">Tab 3</a>
+        </div>
       </div>
     </div>
-    <!-- Nav End -->
     {{block "content" .}}
     {{ end }}
 
@@ -147,8 +194,8 @@
     >
       <div class="items-center grid-flow-col">
         <svg
-          width="36"
-          height="36"
+          width="20"
+          height="20"
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
           fill-rule="evenodd"
@@ -161,7 +208,7 @@
         </svg>
         <p>Copyright © 2022 - All right reserved</p>
       </div>
-      <div class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+      <!-- <div class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
         <a
           ><svg
             xmlns="http://www.w3.org/2000/svg"
@@ -199,7 +246,7 @@
               d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"
             ></path></svg
         ></a>
-      </div>
+      </div> -->
     </footer>
     <!-- Footer End -->
   </body>
