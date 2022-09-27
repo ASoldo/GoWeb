@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -42,9 +43,45 @@ func (m *Repository) Reservations(w http.ResponseWriter, r *http.Request) {
 }
 func (m *Repository) PostReservations(w http.ResponseWriter, r *http.Request) {
 	datestring := r.Form.Get("inp")
+	if len(datestring) == 0 {
+		w.Write([]byte("Please enter a valid dates"))
+		return
+	}
 	dates := strings.Split(datestring, ",")
+
 	for i := range dates {
 		fmt.Println(dates[i])
 	}
 	w.Write([]byte(fmt.Sprintf("Posted dates are: %s - %s", dates[0], dates[1])))
+}
+
+type jsonResponse struct {
+	OK      bool   `json:"ok"`
+	Message string `json:"message"`
+}
+
+func (m *Repository) JsonRq(w http.ResponseWriter, r *http.Request) {
+	respo := jsonResponse{
+		OK:      true,
+		Message: "Sollllldo",
+	}
+	out, err := json.MarshalIndent(respo, "", "    ")
+	if err != nil {
+		fmt.Println(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
+}
+
+func (m *Repository) JsonPost(w http.ResponseWriter, r *http.Request) {
+	respo := jsonResponse{
+		OK:      false,
+		Message: "Sollllldo",
+	}
+	out, err := json.MarshalIndent(respo, "", "    ")
+	if err != nil {
+		fmt.Println(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
 }

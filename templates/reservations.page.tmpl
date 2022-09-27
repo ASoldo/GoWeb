@@ -4,11 +4,12 @@
   <div class="hero bg-base-200 h-full">
       <div class="hero-content text-center mt-32 mb-16">
         <div class="max-w mx-auto max-h h-full">
-        <div x-data="{name: '', calendar: {original: ''}}" 
+        <div x-data="{name: '', calendar: {original: ''}, formData: {}}" 
           x-init="flatpickr('#inp', {
             mode: 'range',
             minDate: 'today',
             dateFormat: 'd-m-Y',
+            allowInput:true,
             locale: {
               rangeSeparator: ','
             },
@@ -19,7 +20,8 @@
               }
             ]}); 
             $watch('calendar.original', value => {
-              console.log(value);calendar['segments'] = value.split(',');
+              console.log(value);
+              calendar['segments'] = value.split(',');
               })" >
           <h1 x-text="name" x-init="name = '{{index .StringMap " test"}}'"></h1>
           <h1>{{index .StringMap "test"}}</h1>
@@ -29,12 +31,21 @@
               class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Press me!</button>
           </div>
           <div class="flex space justify-center">
-            <form action="/reservations" method="post">
+            <form x-ref="form1" action="/reservations" method="post">
               <label for="inp">Select date</label>
               <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
-              <input placeholder="Select dates" class="input input-bordered text-center m-3" x-model="calendar.original" type="text" name="inp" id="inp">
+              <input required placeholder="Select dates" class="input input-bordered text-center m-3" x-model="calendar.original" type="text" name="inp" id="inp">
               <button class="btn btn-sm btn-primary bg-primary" type="submit">Send</button>
             </form>
+            <div name="JsonResponse" x-data="{jsonResp: {}}" x-init="fetch('/getjson').then(response => response.json()).then(data => {jsonResp = data})">
+              <h1 x-text="jsonResp.ok"></h1>
+              <h1 x-text="jsonResp.message"></h1>
+            </div>
+            <button x-init="formData = new FormData($refs.form1);formData.append('csrf_token','{{.CSRFToken}}');" @click=" 
+            fetch('/postjson',{
+              method: 'post',
+              body: formData
+            }).then(response => response.json()).then(data => {console.log(data)})">Post me</button>
           </div>
         </div>
       </div>
