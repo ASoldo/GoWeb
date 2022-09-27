@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/ASoldo/GoWeb/pkg/config"
 	"github.com/ASoldo/GoWeb/pkg/models"
@@ -23,18 +25,26 @@ func NewHandlers(r *Repository) {
 	Repo = r
 }
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
+	render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{})
 }
 
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
 	stringMap["test"] = "Hello, my name is Andrija Hebrang"
 	// w.Header().Set("Cache-Control", "max-age=2592000")
-	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{
+	render.RenderTemplate(w, r, "about.page.tmpl", &models.TemplateData{
 		StringMap: stringMap,
 	})
 }
 
 func (m *Repository) Reservations(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "reservations.page.tmpl", &models.TemplateData{})
+	render.RenderTemplate(w, r, "reservations.page.tmpl", &models.TemplateData{})
+}
+func (m *Repository) PostReservations(w http.ResponseWriter, r *http.Request) {
+	datestring := r.Form.Get("inp")
+	dates := strings.Split(datestring, ",")
+	for i := range dates {
+		fmt.Println(dates[i])
+	}
+	w.Write([]byte(fmt.Sprintf("Posted dates are: %s - %s", dates[0], dates[1])))
 }

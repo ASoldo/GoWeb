@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/ASoldo/GoWeb/pkg/config"
@@ -41,6 +42,11 @@ func main() {
 	fmt.Println("Listening on port: 8080")
 
 	tracer()
+	mystrl := "a,b,c,d"
+	splitted := strings.Split(mystrl, ",")
+	for i := range splitted {
+		fmt.Println(splitted[i])
+	}
 
 	srv := &http.Server{
 		Addr:    ":8080",
