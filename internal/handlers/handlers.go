@@ -74,6 +74,11 @@ func (m *Repository) JsonRq(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) JsonPost(w http.ResponseWriter, r *http.Request) {
+	datastring := strings.Split(r.Form.Get("inp"), ",")
+	data := datastring
+	for i := range data {
+		fmt.Println(data[i])
+	}
 	respo := jsonResponse{
 		OK:      false,
 		Message: "Sollllldo",
