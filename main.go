@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"net/http"
 	"os"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/ASoldo/GoWeb/internal/config"
 	"github.com/ASoldo/GoWeb/internal/handlers"
+	"github.com/ASoldo/GoWeb/internal/models"
 	"github.com/ASoldo/GoWeb/internal/render"
 	"github.com/alexedwards/scs/v2"
 
@@ -19,7 +21,8 @@ var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
-
+	//what am i going to put in session
+	gob.Register(models.Reservation{})
 	app.InProduction = false
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour

@@ -58,7 +58,7 @@
               Post me
             </button>
           </div>
-          <form x-ref="form2" action="/reservations1" method="post" class="bg-red-100" novalidate>
+          <form x-ref="form2" action="/reservations" method="post" class="bg-red-100" novalidate>
               <label for="inp">Select date</label>
               {{with .Form.Errors.Get "inp"}}
               <label class="text-red-900">{{.}}</label>

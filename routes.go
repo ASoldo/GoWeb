@@ -20,12 +20,14 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/about", handlers.Repo.About)
 
 	mux.Get("/reservations", handlers.Repo.Reservations)
-	mux.Post("/reservations", handlers.Repo.PostReservations)
+	// mux.Post("/reservations", handlers.Repo.PostReservations)
 
-	mux.Post("/reservations1", handlers.Repo.PostitReservations)
+	mux.Post("/reservations", handlers.Repo.PostitReservations)
 
 	mux.Get("/getjson", handlers.Repo.JsonRq)
 	mux.Post("/postjson", handlers.Repo.JsonPost)
+
+	mux.Get("/reservations-summary", handlers.Repo.GetReservationsSummary)
 
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static/", fileServer))

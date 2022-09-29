@@ -79,7 +79,7 @@ func (m *Repository) PostitReservations(w http.ResponseWriter, r *http.Request) 
 	// form.Has("inp", r)
 	form.Required("inp", "additionalInput")
 	form.MinLength("additionalInput", 3, r)
-	form.IsEmail("email")
+	// form.IsEmail("email")
 
 	if !form.Valid() {
 		data := make(map[string]interface{})
@@ -90,7 +90,26 @@ func (m *Repository) PostitReservations(w http.ResponseWriter, r *http.Request) 
 		})
 		return
 	}
+	m.App.Session.Put(r.Context(), "reservation", reservation)
+	http.Redirect(w, r, "/reservations-summary", http.StatusSeeOther)
+}
 
+func (m *Repository) GetReservationsSummary(w http.ResponseWriter, r *http.Request) {
+	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation) //type cast to models.Reservation
+	if !ok {
+		fmt.Println("Cannot get item from session")
+		m.App.Session.Put(r.Context(), "error", "Cannot get reservation from this session")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+	//remove 'reservation' from session
+	m.App.Session.Remove(r.Context(), "reservation")
+
+	data := make(map[string]interface{})
+	data["reservation"] = reservation
+	render.RenderTemplate(w, r, "reservations-summary.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
 }
 
 type jsonResponse struct {

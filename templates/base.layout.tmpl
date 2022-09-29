@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script
-      defer
+      
       src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -184,6 +184,46 @@
     </div>
     {{block "content" .}}
     {{ end }}
+
+    <!-- Toast Start -->
+    <!-- x-class="success ? 'bg-green-500' : 'bg-red-500'" -->
+    <div
+      x-show="open"
+      class="w-96 p-4 rounded h-32 fixed bottom-4 right-4 transform-gpu transition-transform duration-400 ease"
+      x-transition:enter-start="translate-y-full"
+      x-transition:enter-end="translate-y-0"
+      x-transition:leave-start="translate-y-0"
+      x-transition:leave-end="translate-y-full"
+      x-data="{
+        open: false,
+        title: 'Toast Title',
+        message: 'Toast message',
+        success: false,
+        openToast() {
+            this.open = true
+            setTimeout(() => {
+                this.open = false
+            }, 5000)
+        }}"
+      
+    >
+      <div class="toast toast-top toast-start">
+        <div class="alert alert-error">
+          <div>
+            {{with .Error}}
+              <span x-init="openToast()" x-text="'{{.}}'"></span>
+            {{end}}
+            {{with .Flash}}
+              <span x-init="openToast()" x-text="'{{.}}'"></span>
+            {{end}}
+            {{with .Warning}}
+              <span x-init="openToast()" x-text="'{{.}}'"></span>
+            {{end}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Toast End -->
 
     <!-- Footer Start -->
     <footer
