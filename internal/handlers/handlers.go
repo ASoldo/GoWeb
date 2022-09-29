@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/ASoldo/GoWeb/internal/config"
+	"github.com/ASoldo/GoWeb/internal/forms"
 	"github.com/ASoldo/GoWeb/internal/models"
 	"github.com/ASoldo/GoWeb/internal/render"
 )
@@ -39,7 +40,13 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) Reservations(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "reservations.page.tmpl", &models.TemplateData{})
+	var emptyReservation models.Reservation
+	data := make(map[string]interface{})
+	data["reservation"] = emptyReservation
+	render.RenderTemplate(w, r, "reservations.page.tmpl", &models.TemplateData{
+		Form: forms.New(nil),
+		Data: data,
+	})
 }
 func (m *Repository) PostReservations(w http.ResponseWriter, r *http.Request) {
 	datestring := r.Form.Get("inp")
@@ -53,6 +60,37 @@ func (m *Repository) PostReservations(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(dates[i])
 	}
 	w.Write([]byte(fmt.Sprintf("Posted dates are: %s - %s", dates[0], dates[1])))
+}
+
+// PostitReservations handlers the posting of a reservation form
+func (m *Repository) PostitReservations(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	reservation := models.Reservation{
+		StartEndDate:    r.Form.Get("inp"),
+		AdditionalInput: r.Form.Get("additionalInput"),
+	}
+	form := forms.New(r.PostForm)
+
+	// form.Has("inp", r)
+	form.Required("inp", "additionalInput")
+	form.MinLength("additionalInput", 3, r)
+	form.IsEmail("email")
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["reservation"] = reservation
+		render.RenderTemplate(w, r, "reservations.page.tmpl", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+		return
+	}
+
 }
 
 type jsonResponse struct {
