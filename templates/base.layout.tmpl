@@ -208,19 +208,15 @@
       
     >
       <div class="toast toast-top toast-start">
-        <div class="alert alert-error">
-          <div>
-            {{with .Error}}
-              <span x-init="openToast()" x-text="'{{.}}'"></span>
-            {{end}}
-            {{with .Flash}}
-              <span x-init="openToast()" x-text="'{{.}}'"></span>
-            {{end}}
-            {{with .Warning}}
-              <span x-init="openToast()" x-text="'{{.}}'"></span>
-            {{end}}
-          </div>
-        </div>
+        {{with .Error}}
+          <span class="alert alert-error" x-init="openToast()" x-text="'{{.}}'"></span>
+        {{end}}
+        {{with .Flash}}
+          <span class="alert alert-success" x-init="openToast()" x-text="'{{.}}'"></span>
+        {{end}}
+        {{with .Warning}}
+          <span class="alert alert-warning" x-init="openToast()" x-text="'{{.}}'"></span>
+        {{end}}
       </div>
     </div>
     <!-- Toast End -->
