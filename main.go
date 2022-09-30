@@ -1,14 +1,17 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
-	"github.com/ASoldo/GoWeb/pkg/config"
-	"github.com/ASoldo/GoWeb/pkg/handlers"
-	"github.com/ASoldo/GoWeb/pkg/render"
+	"github.com/ASoldo/GoWeb/internal/config"
+	"github.com/ASoldo/GoWeb/internal/handlers"
+	"github.com/ASoldo/GoWeb/internal/models"
+	"github.com/ASoldo/GoWeb/internal/render"
 	"github.com/alexedwards/scs/v2"
 
 	"runtime/trace"
@@ -18,7 +21,8 @@ var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
-
+	//what am i going to put in session
+	gob.Register(models.Reservation{})
 	app.InProduction = false
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
@@ -41,6 +45,11 @@ func main() {
 	fmt.Println("Listening on port: 8080")
 
 	tracer()
+	mystrl := "a,b,c,d"
+	splitted := strings.Split(mystrl, ",")
+	for i := range splitted {
+		fmt.Println(splitted[i])
+	}
 
 	srv := &http.Server{
 		Addr:    ":8080",
