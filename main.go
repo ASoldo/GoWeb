@@ -8,39 +8,37 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ASoldo/GoWeb/internal/config"
 	"github.com/ASoldo/GoWeb/internal/handlers"
+	"github.com/ASoldo/GoWeb/internal/middleware"
 	"github.com/ASoldo/GoWeb/internal/models"
 	"github.com/ASoldo/GoWeb/internal/render"
+	"github.com/ASoldo/GoWeb/internal/routes"
 	"github.com/alexedwards/scs/v2"
 
 	"runtime/trace"
 )
 
-var app config.AppConfig
-var session *scs.SessionManager
-
 func main() {
 	//what am i going to put in session
 	gob.Register(models.Reservation{})
-	app.InProduction = false
-	session = scs.New()
-	session.Lifetime = 24 * time.Hour
-	session.Cookie.Persist = true
-	session.Cookie.SameSite = http.SameSiteLaxMode
-	session.Cookie.Secure = app.InProduction
-	app.Session = session
+	middleware.App.InProduction = false
+	middleware.Session = scs.New()
+	middleware.Session.Lifetime = 24 * time.Hour
+	middleware.Session.Cookie.Persist = true
+	middleware.Session.Cookie.SameSite = http.SameSiteLaxMode
+	middleware.Session.Cookie.Secure = middleware.App.InProduction
+	middleware.App.Session = middleware.Session
 	tc, err := render.CreateTemplateCache()
 
 	if err != nil {
 		fmt.Println("Cannot create template cache ", err)
 	}
 
-	app.TemplateCache = tc
-	app.UseCache = false
-	repo := handlers.NewRepository(&app)
+	middleware.App.TemplateCache = tc
+	middleware.App.UseCache = false
+	repo := handlers.NewRepository(&middleware.App)
 	handlers.NewHandlers(repo)
-	render.NewTemplate(&app)
+	render.NewTemplate(&middleware.App)
 	fmt.Println("Server started")
 	fmt.Println("Listening on port: 8080")
 
@@ -53,7 +51,7 @@ func main() {
 
 	srv := &http.Server{
 		Addr:    ":8080",
-		Handler: routes(&app),
+		Handler: routes.Routes(&middleware.App),
 	}
 
 	err = srv.ListenAndServe()

@@ -1,20 +1,21 @@
-package main
+package routes
 
 import (
 	"net/http"
 
 	"github.com/ASoldo/GoWeb/internal/config"
 	"github.com/ASoldo/GoWeb/internal/handlers"
+	middlewares "github.com/ASoldo/GoWeb/internal/middleware"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 )
 
-func routes(app *config.AppConfig) http.Handler {
+func Routes(app *config.AppConfig) http.Handler {
 	mux := chi.NewRouter()
 	mux.Use(middleware.Recoverer)
-	mux.Use(WriteToConsole)
-	mux.Use(NoSurf)
-	mux.Use(SessionLoad)
+	mux.Use(middlewares.WriteToConsole)
+	mux.Use(middlewares.NoSurf)
+	mux.Use(middlewares.SessionLoad)
 
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/about", handlers.Repo.About)
