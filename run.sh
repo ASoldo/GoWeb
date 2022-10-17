@@ -1,4 +1,4 @@
 #!/bin/bash
 
-echo "Running Go App"
-go run *.go
+# echo "Running Go App"
+go run main.go

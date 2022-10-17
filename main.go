@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/gob"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -20,28 +21,10 @@ import (
 
 func main() {
 	//what am i going to put in session
-	gob.Register(models.Reservation{})
-	middleware.App.InProduction = false
-	middleware.Session = scs.New()
-	middleware.Session.Lifetime = 24 * time.Hour
-	middleware.Session.Cookie.Persist = true
-	middleware.Session.Cookie.SameSite = http.SameSiteLaxMode
-	middleware.Session.Cookie.Secure = middleware.App.InProduction
-	middleware.App.Session = middleware.Session
-	tc, err := render.CreateTemplateCache()
-
+	err := run()
 	if err != nil {
-		fmt.Println("Cannot create template cache ", err)
+		log.Fatal(err)
 	}
-
-	middleware.App.TemplateCache = tc
-	middleware.App.UseCache = false
-	repo := handlers.NewRepository(&middleware.App)
-	handlers.NewHandlers(repo)
-	render.NewTemplate(&middleware.App)
-	fmt.Println("Server started")
-	fmt.Println("Listening on port: 8080")
-
 	tracer()
 	mystrl := "a,b,c,d"
 	splitted := strings.Split(mystrl, ",")
@@ -74,4 +57,30 @@ func tracer() {
 	defer trace.Stop()
 
 	fmt.Println("Tracing end")
+}
+
+func run() error {
+	gob.Register(models.Reservation{})
+	middleware.App.InProduction = false
+	middleware.Session = scs.New()
+	middleware.Session.Lifetime = 24 * time.Hour
+	middleware.Session.Cookie.Persist = true
+	middleware.Session.Cookie.SameSite = http.SameSiteLaxMode
+	middleware.Session.Cookie.Secure = middleware.App.InProduction
+	middleware.App.Session = middleware.Session
+
+	tc, err := render.CreateTemplateCache()
+	if err != nil {
+		fmt.Println("Cannot create template cache ", err)
+		return err
+	}
+
+	middleware.App.TemplateCache = tc
+	middleware.App.UseCache = false
+	repo := handlers.NewRepository(&middleware.App)
+	handlers.NewHandlers(repo)
+	render.NewTemplate(&middleware.App)
+	fmt.Println("Server started")
+	fmt.Println("Listening on port: 8080")
+	return nil
 }
