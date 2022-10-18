@@ -43,6 +43,7 @@ func main() {
 	}
 }
 
+// This is for profiling
 func tracer() {
 	fmt.Println("Tracing started")
 	f, err := os.Create("trace.out")
