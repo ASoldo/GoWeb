@@ -8,6 +8,7 @@ import (
 
 	"github.com/ASoldo/GoWeb/internal/config"
 	"github.com/ASoldo/GoWeb/internal/forms"
+	"github.com/ASoldo/GoWeb/internal/helpers"
 	"github.com/ASoldo/GoWeb/internal/models"
 	"github.com/ASoldo/GoWeb/internal/render"
 )
@@ -65,8 +66,10 @@ func (m *Repository) PostReservations(w http.ResponseWriter, r *http.Request) {
 // PostitReservations handlers the posting of a reservation form
 func (m *Repository) PostitReservations(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
+	// err = errors.New("this is an error message soldo")
 	if err != nil {
-		fmt.Println(err)
+		// fmt.Println(err)
+		helpers.ServerError(w, err)
 		return
 	}
 
@@ -97,7 +100,8 @@ func (m *Repository) PostitReservations(w http.ResponseWriter, r *http.Request) 
 func (m *Repository) GetReservationsSummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation) //type cast to models.Reservation
 	if !ok {
-		fmt.Println("Cannot get item from session")
+		// fmt.Println("Cannot get item from session")
+		m.App.ErrorLog.Println(w, ok) // can't get error from session
 		m.App.Session.Put(r.Context(), "error", "Cannot get reservation from this session")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
@@ -124,7 +128,9 @@ func (m *Repository) JsonRq(w http.ResponseWriter, r *http.Request) {
 	}
 	out, err := json.MarshalIndent(respo, "", "    ")
 	if err != nil {
-		fmt.Println(err)
+		// fmt.Println(err)
+		helpers.ServerError(w, err)
+		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)

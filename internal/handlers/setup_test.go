@@ -4,7 +4,9 @@ import (
 	"encoding/gob"
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -21,6 +23,13 @@ var pathToTemplates = "./../../templates/"
 func getRoutes() http.Handler {
 	gob.Register(models.Reservation{})
 	middlewares.App.InProduction = false
+
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	middlewares.App.InfoLog = infoLog
+
+	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	middlewares.App.ErrorLog = errorLog
+
 	middlewares.Session = scs.New()
 	middlewares.Session.Lifetime = 24 * time.Hour
 	middlewares.Session.Cookie.Persist = true

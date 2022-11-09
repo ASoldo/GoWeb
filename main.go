@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/ASoldo/GoWeb/internal/handlers"
+	"github.com/ASoldo/GoWeb/internal/helpers"
 	"github.com/ASoldo/GoWeb/internal/middleware"
 	"github.com/ASoldo/GoWeb/internal/models"
 	"github.com/ASoldo/GoWeb/internal/render"
@@ -63,6 +64,13 @@ func tracer() {
 func run() error {
 	gob.Register(models.Reservation{})
 	middleware.App.InProduction = false
+
+	middleware.InfoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	middleware.App.InfoLog = middleware.InfoLog
+
+	middleware.ErrorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	middleware.App.ErrorLog = middleware.ErrorLog
+
 	middleware.Session = scs.New()
 	middleware.Session.Lifetime = 24 * time.Hour
 	middleware.Session.Cookie.Persist = true
@@ -81,6 +89,7 @@ func run() error {
 	repo := handlers.NewRepository(&middleware.App)
 	handlers.NewHandlers(repo)
 	render.NewTemplate(&middleware.App)
+	helpers.NewHelpers(&middleware.App)
 	fmt.Println("Server started")
 	fmt.Println("Listening on port: 8080")
 	return nil

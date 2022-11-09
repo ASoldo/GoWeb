@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/ASoldo/GoWeb/internal/config"
@@ -11,6 +12,8 @@ import (
 
 var App config.AppConfig
 var Session *scs.SessionManager
+var InfoLog *log.Logger
+var ErrorLog *log.Logger
 
 func WriteToConsole(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
