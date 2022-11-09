@@ -78,7 +78,7 @@ func (m *Repository) PostitReservations(w http.ResponseWriter, r *http.Request) 
 
 	// form.Has("inp", r)
 	form.Required("inp", "additionalInput")
-	form.MinLength("additionalInput", 3, r)
+	form.MinLength("additionalInput", 3)
 	// form.IsEmail("email")
 
 	if !form.Valid() {
