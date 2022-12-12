@@ -32,12 +32,10 @@ func main() {
 	for i := range splitted {
 		fmt.Println(splitted[i])
 	}
-
 	srv := &http.Server{
 		Addr:    ":8080",
 		Handler: routes.Routes(&middleware.App),
 	}
-
 	err = srv.ListenAndServe()
 	if err != nil {
 		fmt.Println(err)
