@@ -7,30 +7,41 @@ import (
 	"strings"
 
 	"github.com/ASoldo/GoWeb/internal/config"
+	"github.com/ASoldo/GoWeb/internal/driver"
 	"github.com/ASoldo/GoWeb/internal/forms"
 	"github.com/ASoldo/GoWeb/internal/helpers"
 	"github.com/ASoldo/GoWeb/internal/models"
 	"github.com/ASoldo/GoWeb/internal/render"
+	"github.com/ASoldo/GoWeb/internal/repository"
+	"github.com/ASoldo/GoWeb/internal/repository/dbrepo"
 )
 
 var Repo *Repository
 
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
-func NewRepository(ac *config.AppConfig) *Repository {
+// NewRepository() creates a new repository
+func NewRepository(ac *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: ac,
+		DB:  dbrepo.NewPostgresRepo(db.SQL, ac),
 	}
 }
+
+// NewHandlers() sets the repository for the handlers
 func NewHandlers(r *Repository) {
 	Repo = r
 }
+
+// Home() is the Home Page handler
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{})
 }
 
+// About() is the About Page handler
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
 	stringMap["test"] = "Hello, my name is Andrija Hebrang"
@@ -40,6 +51,7 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// Reservations() is the Reservations Page handler
 func (m *Repository) Reservations(w http.ResponseWriter, r *http.Request) {
 	var emptyReservation models.Reservation
 	data := make(map[string]interface{})
@@ -49,6 +61,8 @@ func (m *Repository) Reservations(w http.ResponseWriter, r *http.Request) {
 		Data: data,
 	})
 }
+
+// PostReservations() is the PostReservations Page handler
 func (m *Repository) PostReservations(w http.ResponseWriter, r *http.Request) {
 	datestring := r.Form.Get("inp")
 	if len(datestring) == 0 {

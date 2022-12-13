@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ASoldo/GoWeb/internal/driver"
 	"github.com/ASoldo/GoWeb/internal/handlers"
 	"github.com/ASoldo/GoWeb/internal/helpers"
 	"github.com/ASoldo/GoWeb/internal/middleware"
@@ -22,10 +23,11 @@ import (
 
 func main() {
 	//what am i going to put in session
-	err := run()
+	db, err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
+	db.SQL.Close()
 	tracer()
 	mystrl := "a,b,c,d"
 	splitted := strings.Split(mystrl, ",")
@@ -59,7 +61,7 @@ func tracer() {
 	fmt.Println("Tracing end")
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 	gob.Register(models.Reservation{})
 	middleware.App.InProduction = false
 
@@ -76,19 +78,28 @@ func run() error {
 	middleware.Session.Cookie.Secure = middleware.App.InProduction
 	middleware.App.Session = middleware.Session
 
+	// conect to database
+	log.Println("Connecting to the database...")
+
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=bookings user=postgres password=test123")
+	if err != nil {
+		fmt.Println("Cannot connect to database! Exiting...")
+	}
+	fmt.Println("Connected to a database")
+
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		fmt.Println("Cannot create template cache ", err)
-		return err
+		return nil, err
 	}
 
 	middleware.App.TemplateCache = tc
 	middleware.App.UseCache = false
-	repo := handlers.NewRepository(&middleware.App)
+	repo := handlers.NewRepository(&middleware.App, db)
 	handlers.NewHandlers(repo)
 	render.NewTemplate(&middleware.App)
 	helpers.NewHelpers(&middleware.App)
 	fmt.Println("Server started")
 	fmt.Println("Listening on port: 8080")
-	return nil
+	return db, nil
 }
